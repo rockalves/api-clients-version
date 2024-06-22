@@ -5,67 +5,67 @@ from os import environ
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DB_URL')
 db = SQLAlchemy(app)
-
-# implementa a tabela users e define a classe User
 class User(db.Model):
-	__tablename__ = 'users'
-	id = db.Column(db.Integer, primary_key=True)
-	username = db.Column(db.String(80), unique=True, nullable=False)
-	email = db.Column(db.String(120), unique=True, nullable=False)
+  __tablename__ = 'users'
+  id = db.Column(db.Integer, primary_key=True)
+  username = db.Column(db.String(80), unique=True, nullable=False)
+  email = db.Column(db.String(120), unique=True, nullable=False)
 
-def __init__(self, username, email):
-	self.username = username
-	self.email = email
-		
-def json(self):
-	return{'id': id, 'username': self.username,'email': self.email}
+  def __init__(self, username, email):
+    self.username = username
+    self.email = email
+      
+  def json(self):
+    return{'id': id, 'username': self.username,'email': self.email}
 
 db.create_all()
 
 # implementa rota de teste
 @app.route('/test', methods=['GET'])
 def test():
-	return make_response(jsonfy({'message':'teste ok, subiu'}), 200)
+  return make_response(jsonfy({'message':'teste ok, subiu'}), 200)
 
 # Criar Usuário
-@app.route('/users',methos=['POST'])    
+@app.route('/users',methods=['POST'])    
 def create_user():
-	try:
-		data = request.get_json()
-		new_user = User(username=data['username'], email=data['email'])
-		db.session.add(new_user)
-		db.session.commit()
-		return make_response(jsonfy({'message': 'usuario criado.'}), 201)
-	except e:
-		return make_response(jsonfy({'message': 'Erro na criação de usuário'}), 500)
+  try:
+    data = request.get_json()
+    new_user = User(username=data['username'], email=data['email'])
+    db.session.add(new_user)
+    db.session.commit()
+    return make_response(jsonfy({'message': 'usuario criado.'}), 201)
+  except e:
+    return make_response(jsonfy({'message': 'Erro na criação de usuário'}), 500)
 
 #Retornar todos os Usuários    
 @app.route('/users', methods=['GET'])
 def get_users():
-	try:
-		users = User.query.all()
-		return make_response(jsonfy({'users': [user.json() for user in users]}), 200)
-	except e:
-		return make_response(jsonfy({'message': 'Erro na criação de usuário'}), 500)
+  try:
+    users = User.query.all()
+    return make_response(jsonfy({'users': [user.json() for user in users]}), 200)
+  except e:
+    return make_response(jsonfy({'message': 'Erro na criação de usuário'}), 500)
 
 #Retronar usuário pelo id
-@app.route ('/users/<int:id>', methods=['GET'])
+@app.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
   try:
-		user = User.query.filter_by(id=id).first()
-  	return make_response(jsonfy({'user': user.json()}), 200)
-	except e:
-	return make_response(jsonfy({'message': 'Erro ao recuperar o usuário'}))
+    user = User.query.filter_by(id=id).first()
+    return make_response(jsonfy({'user': user.json()}), 200)
+  except e:
+    return make_response(jsonfy({'message': 'Erro ao recuperar o usuário'}),500)
 
-
-
-
-   
-	
-	
-	
-#to-do get users // 08:04 https://youtu.be/fHQWTsWqBdE?list=PL4-O7mT21E3roXTNDUpfu6BvgV7vgNP9s&t=484
-
-
-
-			
+@app.route('/users/<int:id>', methods=['PUT'])
+def update_user (id):
+  try:
+    user = User.query.filter_by(id=id).first()
+    if user:
+      data = request.get_json()
+      user.username = data['username']
+      user.email = data =['email']
+      db.session.commit()
+      return make_response(jsonfy({'message': 'Usuário atualizado'}), 200)
+    return make_response(jsonfy({'message': 'Usuário não encontrado'}), 404)
+  except e:
+    return make_response(jsonfy({'message': 'Erro ao atualizar o usuário'}), 500)
+  
