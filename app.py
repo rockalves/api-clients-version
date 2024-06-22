@@ -37,7 +37,7 @@ def create_user():
   except e:
     return make_response(jsonfy({'message': 'Erro na criação de usuário'}), 500)
 
-#Retornar todos os Usuários    
+# Retornar todos os Usuários    
 @app.route('/users', methods=['GET'])
 def get_users():
   try:
@@ -46,15 +46,18 @@ def get_users():
   except e:
     return make_response(jsonfy({'message': 'Erro na criação de usuário'}), 500)
 
-#Retronar usuário pelo id
+# Retronar usuário pelo id
 @app.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
   try:
     user = User.query.filter_by(id=id).first()
-    return make_response(jsonfy({'user': user.json()}), 200)
+    if user:
+      return make_response(jsonfy({'user': user.json()}), 200)
+    return make_response(jsonfy({'message': 'Usuário não encontrado'}), 404)
   except e:
     return make_response(jsonfy({'message': 'Erro ao recuperar o usuário'}),500)
 
+# Atualizar o usuário pelo id
 @app.route('/users/<int:id>', methods=['PUT'])
 def update_user (id):
   try:
@@ -69,3 +72,15 @@ def update_user (id):
   except e:
     return make_response(jsonfy({'message': 'Erro ao atualizar o usuário'}), 500)
   
+# Deletar o usuário
+@app.route ('/users/<int:id>', methods = ['DELETE'])
+def delete_user(id):
+  try:
+    user = User.query.filter_by(id=id).first()
+    if user:
+      db.session.delete(user)
+      db.session.commit()
+      return make_response(jsonfy({'message': 'Usuário deletado'}), 200)
+    return make_response(jsonfy({'message': 'Usuário não encontrado'}), 404)
+  except e:
+    return make_response(jsonfy({'message': 'Erro ao excluir o usuário'}), 500)
