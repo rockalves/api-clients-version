@@ -65,7 +65,7 @@ def update_user (id):
     if user:
       data = request.get_json()
       user.username = data['username']
-      user.email = data =['email']
+      user.email = data['email']
       db.session.commit()
       return make_response(jsonify({'message': 'Usuário atualizado'}), 200)
     return make_response(jsonify({'message': 'Usuário não encontrado'}), 404)
