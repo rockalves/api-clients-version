@@ -16,7 +16,7 @@ class User(db.Model):
     self.email = email
       
   def json(self):
-    return{'id': id, 'username': self.username,'email': self.email}
+    return{'id': self.id, 'username': self.username,'email': self.email}
 
 db.create_all()
 
@@ -42,7 +42,7 @@ def create_user():
 def get_users():
   try:
     users = User.query.all()
-    return make_response(jsonify({'users': [user.json() for user in users]}), 200)
+    return make_response(jsonify({user.json() for user in users}), 200)
   except e:
     return make_response(jsonify({'message': 'Erro na criação de usuário'}), 500)
 
