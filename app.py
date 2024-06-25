@@ -84,3 +84,7 @@ def delete_user(id):
     return make_response(jsonfy({'message': 'Usuário não encontrado'}), 404)
   except e:
     return make_response(jsonfy({'message': 'Erro ao excluir o usuário'}), 500)
+
+
+#https://www.youtube.com/watch?v=fHQWTsWqBdE&list=PL4-O7mT21E3roXTNDUpfu6BvgV7vgNP9s&t=484s
+
