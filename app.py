@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonfy, make_response
+from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from os import environ
 
@@ -23,7 +23,7 @@ db.create_all()
 # implementa rota de teste
 @app.route('/test', methods=['GET'])
 def test():
-  return make_response(jsonfy({'message':'teste ok, subiu'}), 200)
+  return make_response(jsonify({'message':'teste ok, subiu'}), 200)
 
 # Criar Usuário
 @app.route('/users',methods=['POST'])    
@@ -33,18 +33,18 @@ def create_user():
     new_user = User(username=data['username'], email=data['email'])
     db.session.add(new_user)
     db.session.commit()
-    return make_response(jsonfy({'message': 'usuario criado.'}), 201)
+    return make_response(jsonify({'message': 'usuario criado.'}), 201)
   except e:
-    return make_response(jsonfy({'message': 'Erro na criação de usuário'}), 500)
+    return make_response(jsonify({'message': 'Erro na criação de usuário'}), 500)
 
 # Retornar todos os Usuários    
 @app.route('/users', methods=['GET'])
 def get_users():
   try:
     users = User.query.all()
-    return make_response(jsonfy({'users': [user.json() for user in users]}), 200)
+    return make_response(jsonify({'users': [user.json() for user in users]}), 200)
   except e:
-    return make_response(jsonfy({'message': 'Erro na criação de usuário'}), 500)
+    return make_response(jsonify({'message': 'Erro na criação de usuário'}), 500)
 
 # Retronar usuário pelo id
 @app.route('/users/<int:id>', methods=['GET'])
@@ -52,10 +52,10 @@ def get_user(id):
   try:
     user = User.query.filter_by(id=id).first()
     if user:
-      return make_response(jsonfy({'user': user.json()}), 200)
-    return make_response(jsonfy({'message': 'Usuário não encontrado'}), 404)
+      return make_response(jsonify({'user': user.json()}), 200)
+    return make_response(jsonify({'message': 'Usuário não encontrado'}), 404)
   except e:
-    return make_response(jsonfy({'message': 'Erro ao recuperar o usuário'}),500)
+    return make_response(jsonify({'message': 'Erro ao recuperar o usuário'}),500)
 
 # Atualizar o usuário pelo id
 @app.route('/users/<int:id>', methods=['PUT'])
@@ -67,10 +67,10 @@ def update_user (id):
       user.username = data['username']
       user.email = data =['email']
       db.session.commit()
-      return make_response(jsonfy({'message': 'Usuário atualizado'}), 200)
-    return make_response(jsonfy({'message': 'Usuário não encontrado'}), 404)
+      return make_response(jsonify({'message': 'Usuário atualizado'}), 200)
+    return make_response(jsonify({'message': 'Usuário não encontrado'}), 404)
   except e:
-    return make_response(jsonfy({'message': 'Erro ao atualizar o usuário'}), 500)
+    return make_response(jsonify({'message': 'Erro ao atualizar o usuário'}), 500)
   
 # Deletar o usuário
 @app.route ('/users/<int:id>', methods = ['DELETE'])
@@ -80,10 +80,10 @@ def delete_user(id):
     if user:
       db.session.delete(user)
       db.session.commit()
-      return make_response(jsonfy({'message': 'Usuário deletado'}), 200)
-    return make_response(jsonfy({'message': 'Usuário não encontrado'}), 404)
+      return make_response(jsonify({'message': 'Usuário deletado'}), 200)
+    return make_response(jsonify({'message': 'Usuário não encontrado'}), 404)
   except e:
-    return make_response(jsonfy({'message': 'Erro ao excluir o usuário'}), 500)
+    return make_response(jsonify({'message': 'Erro ao excluir o usuário'}), 500)
 
 
 
