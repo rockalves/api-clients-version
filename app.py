@@ -39,7 +39,7 @@ def test():
 def create_client_env():
   try:
     data = request.get_json()
-    new_client_env = ClientEnvVersion(env=data['env'], unimed=data['unimed'], url=data['url'], modify_date=data['modify_date'], version_reg_date=data['version_reg_date'], last_version=['last_version'])
+    new_client_env = ClientEnvVersion(env=data['env'], unimed=data['unimed'], url=data['url'], modify_date=data['modify_date'], version_reg_date=data['version_reg_date'], last_version=data['last_version'])
     db.session.add(new_client_env)
     db.session.commit()
     return make_response(jsonify({'message': 'Cliente / Ambiente criado.'}), 201)
