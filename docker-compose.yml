@@ -3,19 +3,19 @@ version: "3.9"
 services:
   flask_app:
     container_name: flask_app
-    image: aalves/api-clients-version:1.0.0
+    image: aalves/api-clients-version:2.0.0
     build: .
     ports:
       - "4000:4000"
     environment:
-      - DB_URL=postgresql://postgres:postgres@flask_db:5432/postgres
+      - DB_URL=postgresql://postgres:postgres@client_db:5432/postgres
     depends_on:
-    - flask_db
+    - client_db
     dns:
     - 8.8.8.8
     - 8.8.4.4
-  flask_db:
-    container_name: flask_db
+  client_db:
+    container_name: client_db
     image: postgres:12
     ports:
       - "5432:5432"

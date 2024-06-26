@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DB_URL')
 db = SQLAlchemy(app)
 class ClientEnvVersion(db.Model):
-  __tablename__ = 'clients_version'
+  __tablename__ = 'client_versions'
   id = db.Column(db.Integer, primary_key=True)
   env = db.Column(db.Integer, nullable=False)
   unimed = db.Column(db.Integer, unique=True, nullable=False)
